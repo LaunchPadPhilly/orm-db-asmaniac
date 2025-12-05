@@ -5,11 +5,11 @@ export default function Home() {
     <div className="min-h-screen flex items-center justify-center p-8 relative">
       <div className="max-w-4xl text-center">
         <h1 className="text-6xl md:text-7xl font-bold mb-6 text-purple-400">
-          Hi, I'm <span className="text-pink-300">Asma Drummond</span>!
+          Hi, I&apos;m <span className="text-pink-300">Asma Drummond</span>!
         </h1>
         
         <p className="text-xl md:text-2xl text-purple-300 mb-8 leading-relaxed">
-          Welcome to my portfolio! I'm a passionate developer building amazing web experiences 
+          Welcome to my portfolio! I&apos;m a passionate developer building amazing web experiences 
           with modern technologies. Explore my work and get to know me better.
         </p>
 
@@ -44,7 +44,7 @@ export default function Home() {
             <div className="text-4xl mb-4">💼</div>
             <h3 className="text-xl font-bold mb-2 text-pink-400">Projects</h3>
             <p className="text-pink-300">
-              Check out my latest work and projects I've built.
+              Check out my latest work and projects I&apos;ve built.
             </p>
             <Link href="/projects" className="text-purple-400 hover:text-purple-500 mt-4 inline-block font-semibold">
               View projects →
@@ -55,7 +55,7 @@ export default function Home() {
             <div className="text-4xl mb-4">📧</div>
             <h3 className="text-xl font-bold mb-2 text-purple-400">Contact</h3>
             <p className="text-purple-300">
-              Let's connect! Reach out for collaborations or just to say hello.
+              Let&apos;s connect! Reach out for collaborations or just to say hello.
             </p>
             <Link href="/contact" className="text-pink-400 hover:text-pink-500 mt-4 inline-block font-semibold">
               Get in touch →

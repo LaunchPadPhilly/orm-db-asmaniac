@@ -32,7 +32,7 @@ export default function Projects() {
           My Projects
         </h1>
         <p className="text-xl text-purple-300 text-center mb-12">
-          Here are some of the projects I've been working on
+          Here are some of the projects I&apos;ve been working on
         </p>
         
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -100,7 +100,7 @@ export default function Projects() {
         <div className="mt-16 bg-gradient-to-r from-pink-100 to-purple-100 rounded-lg shadow-sm border border-pink-200 p-8 md:p-12 text-center">
           <h2 className="text-3xl font-bold mb-4 text-purple-400">Interested in Working Together?</h2>
           <p className="text-xl mb-6 text-purple-300">
-            I'm always open to discussing new projects and opportunities.
+            I&apos;m always open to discussing new projects and opportunities.
           </p>
           <a 
             href="/contact" 

@@ -8,7 +8,7 @@ export default function Contact() {
           Get In Touch
         </h1>
         <p className="text-xl text-purple-300 text-center mb-12">
-          I'd love to hear from you! Feel free to reach out through any of these channels.
+          I&apos;d love to hear from you! Feel free to reach out through any of these channels.
         </p>
 
         <div className="bg-white rounded-lg shadow-sm border border-pink-100 p-8 md:p-12 mb-8">
@@ -24,7 +24,7 @@ export default function Contact() {
                 >
                   adrum0070@launchpadphilly.org
                 </a>
-                <p className="text-sm text-gray-500 mt-1">I'll respond within 48 hours!</p>
+                <p className="text-sm text-gray-500 mt-1">I&apos;ll respond within 48 hours!</p>
               </div>
             </div>
 
@@ -66,11 +66,11 @@ export default function Contact() {
 
         {/* Additional Info */}
         <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg shadow-sm border border-pink-100 p-8 md:p-12">
-          <h2 className="text-2xl font-bold mb-4 text-pink-400">Let's Work Together</h2>
+          <h2 className="text-2xl font-bold mb-4 text-pink-400">Let&apos;s Work Together</h2>
           <p className="text-purple-300 mb-6 leading-relaxed">
-            I'm always interested in hearing about new opportunities, whether it's a 
+            I&apos;m always interested in hearing about new opportunities, whether it&apos;s a 
             freelance project, collaboration, or just a friendly chat about web development. 
-            Don't hesitate to reach out!
+            Don&apos;t hesitate to reach out!
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
             <Link 
