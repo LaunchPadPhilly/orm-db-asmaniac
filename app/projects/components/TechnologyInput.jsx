@@ -30,7 +30,14 @@ export default function TechnologyInput({ technologies = [], onChange, error }) 
   }
 
   const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' || e.keyCode === 13) {
+      e.preventDefault()
+      handleAdd()
+    }
+  }
+  
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' || e.keyCode === 13) {
       e.preventDefault()
       handleAdd()
     }
@@ -48,6 +55,7 @@ export default function TechnologyInput({ technologies = [], onChange, error }) 
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           onKeyPress={handleKeyPress}
+          onKeyDown={handleKeyDown}
           placeholder="Type a technology"
           className={`flex-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 ${
             error ? 'border-red-500' : 'border-gray-300'

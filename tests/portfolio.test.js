@@ -54,22 +54,22 @@ describe('Week 1 Portfolio - Component Tests', () => {
   })
 
   it('should have ProjectForm component file', () => {
-    const projectFormPath = path.join(process.cwd(), 'app/projects/components/ProjectForm.js')
+    const projectFormPath = path.join(process.cwd(), 'app/projects/components/ProjectForm.jsx')
     const exists = fs.existsSync(projectFormPath)
     
     if (!exists) {
-      console.warn('⚠️  ProjectForm.js not found. Create it in app/projects/components/')
+      console.warn('⚠️  ProjectForm.jsx not found. Create it in app/projects/components/')
     }
     
     expect(exists, 'ProjectForm component is required for project creation').toBe(true)
   })
 
   it('should have TechnologyInput component file', () => {
-    const technologyInputPath = path.join(process.cwd(), 'app/projects/components/TechnologyInput.js')
+    const technologyInputPath = path.join(process.cwd(), 'app/projects/components/TechnologyInput.jsx')
     const exists = fs.existsSync(technologyInputPath)
     
     if (!exists) {
-      console.warn('⚠️  TechnologyInput.js not found. Create it in app/projects/components/')
+      console.warn('⚠️  TechnologyInput.jsx not found. Create it in app/projects/components/')
     }
     
     expect(exists, 'TechnologyInput component is required for technology selection').toBe(true)
@@ -218,8 +218,8 @@ describe('Week 1 Portfolio - Completion Summary', () => {
       'app/layout.js',
       'app/components/Navbar.js',
       'app/components/Footer.js',
-      'app/projects/components/ProjectForm.js',
-      'app/projects/components/TechnologyInput.js',
+      'app/projects/components/ProjectForm.jsx',
+      'app/projects/components/TechnologyInput.jsx',
     ]
 
     requiredFiles.forEach(file => {
