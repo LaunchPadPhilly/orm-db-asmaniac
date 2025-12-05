@@ -1,32 +1,66 @@
+import Link from 'next/link'
+
 export default function Home() {
   return (
-    <div className="min-h-screen flex items-center justify-center p-8">
+    <div className="min-h-screen flex items-center justify-center p-8 relative">
       <div className="max-w-4xl text-center">
-        <h1 className="text-6xl font-bold mb-6 text-gray-900">
-          Welcome to My Portfolio
+        <h1 className="text-6xl md:text-7xl font-bold mb-6 text-purple-400">
+          Hi, I'm <span className="text-pink-300">Asma Drummond</span>!
         </h1>
         
-        <p className="text-xl text-gray-600 mb-8">
-          This is your homepage starter template. Customize this page to introduce yourself!
+        <p className="text-xl md:text-2xl text-purple-300 mb-8 leading-relaxed">
+          Welcome to my portfolio! I'm a passionate developer building amazing web experiences 
+          with modern technologies. Explore my work and get to know me better.
         </p>
 
-        <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-6 text-left">
-          <h2 className="text-2xl font-bold mb-4 text-blue-900">
-            📝 TODO: Customize Your Homepage
-          </h2>
-          <ul className="space-y-2 text-blue-800">
-            <li>✏️ Change the heading to include your name</li>
-            <li>✏️ Write a brief introduction about yourself</li>
-            <li>✏️ Add navigation links to your other pages</li>
-            <li>✏️ Choose your own color scheme</li>
-            <li>✏️ Make it responsive for mobile devices</li>
-          </ul>
+        <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+          <Link 
+            href="/about" 
+            className="bg-pink-200 text-pink-800 px-8 py-3 rounded-lg font-semibold hover:bg-pink-300 transition-all shadow-sm"
+          >
+            Learn About Me
+          </Link>
+          <Link 
+            href="/projects" 
+            className="bg-purple-200 text-purple-800 px-8 py-3 rounded-lg font-semibold hover:bg-purple-300 transition-all shadow-sm"
+          >
+            View My Projects
+          </Link>
         </div>
 
-        <div className="mt-8 p-4 bg-yellow-50 border-2 border-yellow-200 rounded-lg">
-          <p className="text-yellow-900 font-semibold">
-            💡 Tip: Check the README.md for detailed instructions and examples!
-          </p>
+        <div className="grid md:grid-cols-3 gap-6 mt-16">
+          <div className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow border border-pink-100">
+            <div className="text-4xl mb-4">👤</div>
+            <h3 className="text-xl font-bold mb-2 text-purple-400">About Me</h3>
+            <p className="text-purple-300">
+              Discover my background, skills, and what drives me as a developer.
+            </p>
+            <Link href="/about" className="text-pink-400 hover:text-pink-500 mt-4 inline-block font-semibold">
+              Learn more →
+            </Link>
+          </div>
+
+          <div className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow border border-pink-100">
+            <div className="text-4xl mb-4">💼</div>
+            <h3 className="text-xl font-bold mb-2 text-pink-400">Projects</h3>
+            <p className="text-pink-300">
+              Check out my latest work and projects I've built.
+            </p>
+            <Link href="/projects" className="text-purple-400 hover:text-purple-500 mt-4 inline-block font-semibold">
+              View projects →
+            </Link>
+          </div>
+
+          <div className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow border border-purple-100">
+            <div className="text-4xl mb-4">📧</div>
+            <h3 className="text-xl font-bold mb-2 text-purple-400">Contact</h3>
+            <p className="text-purple-300">
+              Let's connect! Reach out for collaborations or just to say hello.
+            </p>
+            <Link href="/contact" className="text-pink-400 hover:text-pink-500 mt-4 inline-block font-semibold">
+              Get in touch →
+            </Link>
+          </div>
         </div>
       </div>
     </div>

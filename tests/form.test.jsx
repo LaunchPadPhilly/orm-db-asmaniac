@@ -4,8 +4,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom'
-import ProjectForm from '../app/projects/components/ProjectForm.js'
-import TechnologyInput from '../app/projects/components/TechnologyInput.js'
+import ProjectForm from '../app/projects/components/ProjectForm.jsx'
+import TechnologyInput from '../app/projects/components/TechnologyInput.jsx'
 
 describe('ProjectForm Component', () => {
   const mockOnSubmit = vi.fn()
@@ -196,7 +196,7 @@ describe('TechnologyInput Component', () => {
     
     const input = screen.getByPlaceholderText(/Type a technology/)
     fireEvent.change(input, { target: { value: 'Angular' } })
-    fireEvent.keyPress(input, { key: 'Enter' })
+    fireEvent.keyDown(input, { key: 'Enter', code: 'Enter', keyCode: 13 })
     
     expect(mockOnChange).toHaveBeenCalledWith(['Angular'])
   })
@@ -223,8 +223,9 @@ describe('TechnologyInput Component', () => {
       />
     )
     
-    expect(screen.getByText('React')).toBeInTheDocument()
-    expect(screen.getByText('JavaScript')).toBeInTheDocument()
+    // Check for remove buttons which are only on selected technologies
+    expect(screen.getByLabelText('Remove React')).toBeInTheDocument()
+    expect(screen.getByLabelText('Remove JavaScript')).toBeInTheDocument()
     expect(screen.getAllByLabelText(/Remove/).length).toBe(2)
   })
 

@@ -1,7 +1,25 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { PrismaClient } from '@prisma/client';
+import { GET as getProjects, POST as createProject } from '../app/api/projects/route.js';
+import { GET as getProject, PUT as updateProject, DELETE as deleteProject } from '../app/api/projects/[id]/route.js';
 
 const prisma = new PrismaClient();
+
+// Helper to create a mock Request
+function createMockRequest(method, body = null, params = {}) {
+  return {
+    method,
+    json: async () => body,
+    headers: new Headers(),
+    ...params
+  };
+}
+
+// Helper to extract JSON from NextResponse
+async function getResponseData(response) {
+  const text = await response.text();
+  return text ? JSON.parse(text) : null;
+}
 
 // Test data
 const testProject = {
@@ -15,11 +33,18 @@ const testProject = {
 
 describe('API Routes - Projects', () => {
   // Clean up test data before and after each test
+  // Use specific prefixes to avoid interfering with other tests
   beforeEach(async () => {
-    // Clean up any existing test data
+    // Clean up any existing API test data (but not "Test DB" which is for db.test.js)
     await prisma.project.deleteMany({
       where: {
-        title: { contains: "Test" }
+        OR: [
+          { title: { contains: "Test Portfolio Website" } },
+          { title: { contains: "Test Minimal Project" } },
+          { title: { contains: "Updated Test Project" } },
+          { title: { contains: "Test Project 1" } },
+          { title: { contains: "Test Project 2" } }
+        ]
       }
     });
   });
@@ -28,18 +53,50 @@ describe('API Routes - Projects', () => {
     // Clean up test data after each test
     await prisma.project.deleteMany({
       where: {
-        title: { contains: "Test" }
+        OR: [
+          { title: { contains: "Test Portfolio Website" } },
+          { title: { contains: "Test Minimal Project" } },
+          { title: { contains: "Updated Test Project" } },
+          { title: { contains: "Test Project 1" } },
+          { title: { contains: "Test Project 2" } }
+        ]
       }
     });
   });
 
   describe('GET /api/projects', () => {
     it('should return an empty array when no projects exist', async () => {
-      const response = await fetch('http://localhost:3000/api/projects');
+      // Clean up all API test projects first
+      await prisma.project.deleteMany({
+        where: {
+          OR: [
+            { title: { contains: "Test Portfolio Website" } },
+            { title: { contains: "Test Minimal Project" } },
+            { title: { contains: "Updated Test Project" } },
+            { title: { contains: "Test Project 1" } },
+            { title: { contains: "Test Project 2" } }
+          ]
+        }
+      });
+
+      const request = createMockRequest('GET');
+      const response = await getProjects(request);
+      
       expect(response.status).toBe(200);
       
-      const data = await response.json();
+      const data = await getResponseData(response);
       expect(Array.isArray(data)).toBe(true);
+      // Check that API test projects are not in the response
+      const apiTestProjects = data.filter(p => 
+        p.title && (
+          p.title.includes("Test Portfolio Website") ||
+          p.title.includes("Test Minimal Project") ||
+          p.title.includes("Updated Test Project") ||
+          p.title.includes("Test Project 1") ||
+          p.title.includes("Test Project 2")
+        )
+      );
+      expect(apiTestProjects.length).toBe(0);
     });
 
     it('should return all projects when projects exist', async () => {
@@ -48,10 +105,11 @@ describe('API Routes - Projects', () => {
         data: testProject
       });
 
-      const response = await fetch('http://localhost:3000/api/projects');
+      const request = createMockRequest('GET');
+      const response = await getProjects(request);
       expect(response.status).toBe(200);
       
-      const data = await response.json();
+      const data = await getResponseData(response);
       expect(Array.isArray(data)).toBe(true);
       expect(data.length).toBeGreaterThanOrEqual(1);
       
@@ -74,8 +132,9 @@ describe('API Routes - Projects', () => {
         data: { ...testProject, title: "Test Project 2" }
       });
 
-      const response = await fetch('http://localhost:3000/api/projects');
-      const data = await response.json();
+      const request = createMockRequest('GET');
+      const response = await getProjects(request);
+      const data = await getResponseData(response);
       
       const testProjects = data.filter(p => p.title.includes("Test Project"));
       expect(testProjects.length).toBe(2);
@@ -89,17 +148,12 @@ describe('API Routes - Projects', () => {
 
   describe('POST /api/projects', () => {
     it('should create a new project with valid data', async () => {
-      const response = await fetch('http://localhost:3000/api/projects', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(testProject)
-      });
+      const request = createMockRequest('POST', testProject);
+      const response = await createProject(request);
 
       expect(response.status).toBe(201);
       
-      const data = await response.json();
+      const data = await getResponseData(response);
       expect(data.title).toBe(testProject.title);
       expect(data.description).toBe(testProject.description);
       expect(data.imageUrl).toBe(testProject.imageUrl);
@@ -119,17 +173,12 @@ describe('API Routes - Projects', () => {
         technologies: ["JavaScript"]
       };
 
-      const response = await fetch('http://localhost:3000/api/projects', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(minimalProject)
-      });
+      const request = createMockRequest('POST', minimalProject);
+      const response = await createProject(request);
 
       expect(response.status).toBe(201);
       
-      const data = await response.json();
+      const data = await getResponseData(response);
       expect(data.title).toBe(minimalProject.title);
       expect(data.description).toBe(minimalProject.description);
       expect(data.imageUrl).toBeNull();
@@ -142,13 +191,8 @@ describe('API Routes - Projects', () => {
         description: "Missing title"
       };
 
-      const response = await fetch('http://localhost:3000/api/projects', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(invalidProject)
-      });
+      const request = createMockRequest('POST', invalidProject);
+      const response = await createProject(request);
 
       expect(response.status).toBe(400);
     });
@@ -160,28 +204,31 @@ describe('API Routes - Projects', () => {
         data: testProject
       });
 
-      const response = await fetch(`http://localhost:3000/api/projects/${createdProject.id}`);
+      const request = createMockRequest('GET');
+      const response = await getProject(request, { params: { id: createdProject.id.toString() } });
       expect(response.status).toBe(200);
       
-      const data = await response.json();
+      const data = await getResponseData(response);
       expect(data.id).toBe(createdProject.id);
       expect(data.title).toBe(testProject.title);
       expect(data.description).toBe(testProject.description);
     });
 
     it('should return 404 for non-existent project', async () => {
-      const response = await fetch('http://localhost:3000/api/projects/99999');
+      const request = createMockRequest('GET');
+      const response = await getProject(request, { params: { id: '99999' } });
       expect(response.status).toBe(404);
       
-      const data = await response.json();
+      const data = await getResponseData(response);
       expect(data.error).toBe('Project not found');
     });
 
     it('should return 400 for invalid ID', async () => {
-      const response = await fetch('http://localhost:3000/api/projects/invalid-id');
+      const request = createMockRequest('GET');
+      const response = await getProject(request, { params: { id: 'invalid-id' } });
       expect(response.status).toBe(400);
       
-      const data = await response.json();
+      const data = await getResponseData(response);
       expect(data.error).toBe('Invalid project ID');
     });
   });
@@ -198,17 +245,12 @@ describe('API Routes - Projects', () => {
         technologies: ["Next.js", "TypeScript"]
       };
 
-      const response = await fetch(`http://localhost:3000/api/projects/${createdProject.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updatedData)
-      });
+      const request = createMockRequest('PUT', updatedData);
+      const response = await updateProject(request, { params: { id: createdProject.id.toString() } });
 
       expect(response.status).toBe(200);
       
-      const data = await response.json();
+      const data = await getResponseData(response);
       expect(data.title).toBe(updatedData.title);
       expect(data.description).toBe(updatedData.description);
       expect(data.technologies).toEqual(updatedData.technologies);
@@ -218,13 +260,8 @@ describe('API Routes - Projects', () => {
     it('should return 404 for updating non-existent project', async () => {
       const updatedData = { title: "Updated Title" };
 
-      const response = await fetch('http://localhost:3000/api/projects/99999', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updatedData)
-      });
+      const request = createMockRequest('PUT', updatedData);
+      const response = await updateProject(request, { params: { id: '99999' } });
 
       expect(response.status).toBe(404);
     });
@@ -236,13 +273,12 @@ describe('API Routes - Projects', () => {
         data: testProject
       });
 
-      const response = await fetch(`http://localhost:3000/api/projects/${createdProject.id}`, {
-        method: 'DELETE'
-      });
+      const request = createMockRequest('DELETE');
+      const response = await deleteProject(request, { params: { id: createdProject.id.toString() } });
 
       expect(response.status).toBe(200);
       
-      const data = await response.json();
+      const data = await getResponseData(response);
       expect(data.message).toBe('Project deleted successfully');
 
       // Verify project is actually deleted
@@ -253,9 +289,8 @@ describe('API Routes - Projects', () => {
     });
 
     it('should return 404 for deleting non-existent project', async () => {
-      const response = await fetch('http://localhost:3000/api/projects/99999', {
-        method: 'DELETE'
-      });
+      const request = createMockRequest('DELETE');
+      const response = await deleteProject(request, { params: { id: '99999' } });
 
       expect(response.status).toBe(404);
     });
